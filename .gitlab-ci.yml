@@ -1,0 +1,80 @@
+image: docker:latest
+
+variables:
+  APP_PORT: 12345
+  DOCKER_DRIVER: overlay
+  SERVICE_NAME: "listing-service"
+  DOCKER_REGISTRY: "registry.gitlab.com"
+  DOCKER_IMAGE_PREFIX: "registry.gitlab.com/aloeda_product_development/your_great_locations"
+
+before_script:
+  - "cd listing-service"
+  - export DOCKER_IMAGE_TAG=$(date +%Y%m%d%H%M%S)
+
+stages:
+  - test
+  - build
+  - publish
+  - deploy
+
+cache:
+  key: maven-cache
+  paths:
+    - $CI_PROJECT_DIR/.m2/
+
+unit-test-job:
+  image: maven:3-jdk-11
+  stage: test
+  script: "mvn failsafe:integration-test@ut-tests"
+  tags:
+    - builder
+
+integration-test-job:
+  image: maven:3-jdk-11
+  stage: test
+  needs: ["unit-test-job"]
+  script: "mvn failsafe:integration-test@it-tests"
+  tags:
+    - builder
+
+build-job:
+  image: maven:3-jdk-11
+  stage: build
+  needs: ["integration-test-job"]
+  script:
+    - "mvn package spring-boot:repackage -DskipTests"
+  tags:
+    - builder
+  artifacts:
+    paths:
+      - "**/target/$SERVICE_NAME.jar"
+
+publish-job:
+  stage: publish
+  dependencies:
+    - build-job
+  services:
+    - docker:dind
+  script:
+    - docker build -t "$DOCKER_IMAGE_PREFIX/$SERVICE_NAME:latest" .
+    - docker build -t "$DOCKER_IMAGE_PREFIX/$SERVICE_NAME:$DOCKER_IMAGE_TAG" .
+    - docker login $DOCKER_REGISTRY -u $DOCKER_HOST_USERNAME -p $DOCKER_HOST_PASSWORD
+    - docker push "$DOCKER_IMAGE_PREFIX/$SERVICE_NAME:latest"
+    - docker push "$DOCKER_IMAGE_PREFIX/$SERVICE_NAME:$DOCKER_IMAGE_TAG"
+  environment:
+    name: staging
+  tags:
+    - builder
+
+deploy-job:
+  image: ubuntu:trusty
+  stage: deploy
+  tags:
+    - builder
+  script:
+    - chmod 700 $ID_RSA
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $AWS_SERVER_USER@$AWS_SERVER_IP "sudo docker login -u $DOCKER_HOST_USERNAME -p $DOCKER_HOST_PASSWORD $DOCKER_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $AWS_SERVER_USER@$AWS_SERVER_IP "sudo docker container rm -f $SERVICE_NAME || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $AWS_SERVER_USER@$AWS_SERVER_IP "sudo docker run -d -p $APP_PORT:12345 --network appnet -e ENV_DATASOURCE_DB_HOST='stuff_listing_1' -e ENV_DATASOURCE_DB_PORT='5432' --name $SERVICE_NAME $DOCKER_IMAGE_PREFIX/$SERVICE_NAME:latest"
+  environment:
+    name: staging

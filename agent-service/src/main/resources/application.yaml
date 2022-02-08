@@ -1,0 +1,52 @@
+server:
+  port: ${ENV_SERVICE_PORT:12345}
+
+spring:
+  servlet:
+    multipart:
+      max-request-size: "10MB"
+      max-file-size: "1MB"
+  redis:
+    password: ${ENV_REDIS_PASSWORD:MDNcVb924a}
+    port: ${ENV_REDIS_PORT:6379}
+    host: ${ENV_REDIS_HOST:localhost}
+    timeout: ${ENV_REDIS_TIMEOUT:60000}
+  datasource:
+    url: 'jdbc:postgresql://${ENV_DATASOURCE_DB_HOST:localhost}:${ENV_DATASOURCE_DB_PORT:5440}/${ENV_DATABASE:postgres}?useLegacyDatetimeCode=false'
+    username: ${ENV_DATASOURCE_USERNAME:postgres}
+    password: ${ENV_DATASOURCE_SECRET:postgres}
+    driver-class-name: 'org.postgresql.Driver'
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: "UTC"
+          batch_size: ${ENV_JDBC_BATCH_SIZE:1000}
+    show-sql: false
+    hibernate.ddl-auto: update
+  kafka:
+    producer:
+      bootstrap-servers: ${ENV_KAFKA_BOOTSTRAP_SERVERS:127.0.0.1:29092}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    consumer:
+      bootstrap-servers: ${ENV_KAFKA_BOOTSTRAP_SERVERS:127.0.0.1:29092}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  banner:
+    image:
+      location: "classpath:banner.txt"
+  application:
+    name: agent-service
+
+management:
+  endpoint:
+    health:
+      group:
+        readiness:
+          include: "*"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: ${ENV_MONITORING_PATH:/}

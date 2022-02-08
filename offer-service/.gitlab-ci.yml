@@ -1,0 +1,26 @@
+image: maven:3-jdk-11
+
+before_script:
+  - "mvn clean"
+
+stages:
+  - test
+  - build
+  - promote
+
+variables:
+  APP_PROJECT_ID: 15943787
+
+test:
+  stage: test app
+  script:
+    - mvn failsafe:integration-test@it-tests
+  only:
+    - master
+
+build:
+  stage: build app
+  script:
+    - mvn failsafe:integration-test@it-tests
+  only:
+    - master

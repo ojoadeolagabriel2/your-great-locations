@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+
+  offers:
+    image: postgres:10.5
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5438:5432'
+    volumes:
+      - ./metadata/postgres-data/offers:/var/lib/postgresql/data
+
+  listing:
+    image: postgres:10.5
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5439:5432'
+    volumes:
+      - ./metadata/postgres-data/listing:/var/lib/postgresql/data
+
+  agents:
+    image: postgres:10.5
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - '5440:5432'
+    volumes:
+      - ./metadata/postgres-data/agents:/var/lib/postgresql/data
