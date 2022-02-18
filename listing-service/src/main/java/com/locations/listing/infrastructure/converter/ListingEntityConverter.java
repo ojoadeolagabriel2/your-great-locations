@@ -8,13 +8,13 @@ import com.locations.listing.domain.model.ListingOwner;
 import com.locations.listing.domain.valueobject.*;
 import com.locations.listing.infrastructure.data.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.util.Arrays;
 
 import static java.lang.String.join;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
 public class ListingEntityConverter {
@@ -64,7 +64,7 @@ public class ListingEntityConverter {
     }
 
     public ListingEntity getListingEntity(ListingEntity entity, Listing listing) {
-        if(ObjectUtils.isEmpty(entity))
+        if(isEmpty(entity))
             entity = new ListingEntity();
 
         entity.setUuid(listing.getUuid());

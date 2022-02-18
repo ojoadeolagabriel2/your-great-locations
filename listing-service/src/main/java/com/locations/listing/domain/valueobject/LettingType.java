@@ -12,8 +12,8 @@ public enum LettingType {
     SHORT_TERM("SHORT_TERM", "Short Term"),
     LONG_TERM("LONG_TERM", "Long Term");
 
-    String code;
-    String description;
+    final String code;
+    final String description;
 
     public static Optional<LettingType> getByString(String code) {
         return Arrays

@@ -19,10 +19,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -52,7 +52,7 @@ public class ListingController {
     }
 
     @Timed(description = "time interval processing patch")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(CREATED)
     @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
     public void patchListing(@PathVariable Long id, @RequestBody JsonPatch patch) {
         ListingDto listingDto = converter.toDto(listingService.getById(id));
