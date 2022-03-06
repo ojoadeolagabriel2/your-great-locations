@@ -12,9 +12,9 @@ public enum ListingCurrency {
     GBP("£", "GBP", "British Pound"),
     USD("$", "USD", "United States Dollar");
 
-    String symbol;
-    String shortCode;
-    String description;
+    final String symbol;
+    final String shortCode;
+    final String description;
 
     public static Optional<ListingCurrency> getByShortCode(String code) {
         return Arrays
