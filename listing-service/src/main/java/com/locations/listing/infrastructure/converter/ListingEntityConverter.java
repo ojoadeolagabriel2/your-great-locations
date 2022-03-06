@@ -1,10 +1,7 @@
 package com.locations.listing.infrastructure.converter;
 
 import com.locations.listing.domain.error.BusinessException;
-import com.locations.listing.domain.model.GeoLocation;
-import com.locations.listing.domain.model.Listing;
-import com.locations.listing.domain.model.ListingAddress;
-import com.locations.listing.domain.model.ListingOwner;
+import com.locations.listing.domain.model.*;
 import com.locations.listing.domain.valueobject.*;
 import com.locations.listing.infrastructure.data.*;
 import org.springframework.stereotype.Service;
@@ -12,6 +9,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Arrays;
 
+import static com.locations.listing.domain.model.ErrorCode.INTERNAL_SERVER_ERROR;
 import static java.lang.String.join;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -29,14 +27,14 @@ public class ListingEntityConverter {
                 .listingOwnershipType(OwnershipType.valueOf(entity.getListingOwnershipType()))
                 .listedDate(entity.getListedDate())
                 .listingTitle(entity.getListingTitle())
-                .currency(ListingCurrency.getByShortCode(entity.getListingCurrency()).orElseThrow(() -> new BusinessException("10001", "invalid currency retrieved")))
+                .currency(ListingCurrency.getByShortCode(entity.getListingCurrency()).orElseThrow(() -> new BusinessException(INTERNAL_SERVER_ERROR.getCode(), "invalid currency retrieved")))
                 .listedPricePerMonth(entity.getListedPricePerMonth())
                 .listedPricePerWeek(entity.getListedPricePerWeek())
                 .images(entity.getListingImageEntities().stream().map(ListingImageEntity::getCode).collect(toList()))
                 .imageThumbNails(entity.getListingImageThumbnailEntities().stream().map(ListingImageThumbnailEntity::getCode).collect(toList()))
-                .letType(LettingType.getByString(entity.getLetType()).orElseThrow(() -> new BusinessException("10001", "invalid let type retrieved")))
-                .furnishedType(FurnishedType.getByString(entity.getFurnishedType()).orElseThrow(() -> new BusinessException("10001", "invalid furnished type retrieved")))
-                .propertyType(PropertyType.getByString(entity.getPropertyType()).orElseThrow(() -> new BusinessException("10001", "invalid property type retrieved")))
+                .letType(LettingType.getByString(entity.getLetType()).orElseThrow(() -> new BusinessException(INTERNAL_SERVER_ERROR.getCode(), "invalid let type retrieved")))
+                .furnishedType(FurnishedType.getByString(entity.getFurnishedType()).orElseThrow(() -> new BusinessException(INTERNAL_SERVER_ERROR.getCode(), "invalid furnished type retrieved")))
+                .propertyType(PropertyType.getByString(entity.getPropertyType()).orElseThrow(() -> new BusinessException(INTERNAL_SERVER_ERROR.getCode(), "invalid property type retrieved")))
                 .keyFeatures(entity.getListingKeyFeatures().stream().map(ListingKeyFeatureEntity::getFeatureDescription).collect(toList()))
                 .roomCount(entity.getRoomCount())
                 .bathroomCount(entity.getBathroomCount())
