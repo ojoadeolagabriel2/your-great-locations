@@ -41,14 +41,11 @@ workflows:
   build:
     jobs:
       - build_promote_to_docker:
-          requires:
-            - "integration_test"
+          name: "build_promote_to_docker"
   deploy:
     jobs:
       - deploy_to_dev:
-          requires:
-            - "build_promote_to_docker"
+          name: "deploy_to_dev"
       - deploy_to_production:
           type: approval
-          requires:
-            - "build_promote_to_docker"
+          name: "deploy_to_production"
