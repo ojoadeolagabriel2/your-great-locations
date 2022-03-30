@@ -33,9 +33,9 @@ jobs:
       - checkout
       - run: echo "this is deploy_to_production"
 
-#workflows:
-#  jobs:
-#    - unit_test
+workflows:
+  jobs:
+    - unit_test
 #    - integration_test
 #    - build_promote_to_docker:
 #        requires:
