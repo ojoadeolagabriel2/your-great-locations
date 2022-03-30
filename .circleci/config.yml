@@ -1,10 +1,13 @@
 version: 2.1
 
 jobs:
-  build:
+  unit_test:
     docker:
       - image: cimg/openjdk:17.0.2
     steps:
       - run: java --version
       - checkout
       - run: echo "this unit_test"
+workflows:
+  jobs:
+    - unit_test
