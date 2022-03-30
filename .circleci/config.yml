@@ -8,6 +8,45 @@ jobs:
       - run: java --version
       - checkout
       - run: echo "this unit_test"
+  integration_test:
+    docker:
+      - image: cimg/openjdk:17.0.2
+    steps:
+      - checkout
+      - run: echo "this is integration_test"
+  build_promote_to_docker:
+    docker:
+      - image: cimg/openjdk:17.0.2
+    steps:
+      - checkout
+      - run: echo "this is build_promote_to_docker"
+  deploy_to_dev:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - run: echo "this is deploy_to_dev"
+  deploy_to_production:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - run: echo "this is deploy_to_production"
+
 workflows:
-  jobs:
-    - unit_test
+  test_and_build:
+    jobs:
+      - unit_test
+      - integration_test
+      - build_promote_to_docker:
+          requires:
+            - "integration_test"
+  deploy:
+    jobs:
+      - deploy_to_dev:
+          requires:
+            - "build_promote_to_docker"
+      - deploy_to_production:
+          type: approval
+          requires:
+            - "build_promote_to_docker"
