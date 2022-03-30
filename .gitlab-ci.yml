@@ -32,7 +32,7 @@ unit-test-job:
 integration-test-job:
   image: maven:3-jdk-11
   stage: test
-  needs: ["unit-test-job"]
+  needs: [ "unit-test-job" ]
   script: "mvn failsafe:integration-test@it-tests"
   tags:
     - builder
@@ -40,9 +40,9 @@ integration-test-job:
 build-job:
   image: maven:3-jdk-11
   stage: build
-  needs: ["integration-test-job"]
+  needs: [ "unit-test-job", "integration-test-job" ]
   script:
-    - "mvn package spring-boot:repackage -DskipTests"
+    - "mvn clean package spring-boot:repackage -DskipTests"
   tags:
     - builder
   artifacts:
