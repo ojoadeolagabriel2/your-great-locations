@@ -34,14 +34,15 @@ jobs:
 
 workflows:
   jobs:
+    - unit_test
+    - integration_test
     - build_promote_to_docker:
-      filters:
-        branches:
-          only:
-            - main
+        requires:
+          - "integration_test"
     - deploy_to_dev:
-      requires:
-        - build_promote_to_docker
+        requires:
+          - "build_promote_to_docker"
     - deploy_to_production:
-      requires:
-        - build_promote_to_docker
+        type: approval
+        requires:
+          - "build_promote_to_docker"
