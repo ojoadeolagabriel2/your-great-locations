@@ -1,9 +1,47 @@
 version: 2.1
 
 jobs:
-  build:
+  unit_test:
     docker:
-      - image: cimg/openjdk:17.0.2
+      - image: cimg/base:2022.03
     steps:
       - checkout
       - run: echo "this is the build job"
+  integration_test:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+  build_promote_to_docker:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+  deploy_to_dev:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+  deploy_to_production:
+    docker:
+      - image: cimg/base:2022.03
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+
+workflows:
+  jobs:
+    - build_promote_to_docker:
+        filters:
+          branches:
+            only:
+              - main
+    - deploy_to_dev:
+        requires:
+          - build_promote_to_docker
+    - deploy_to_production:
+        requires:
+          - build_promote_to_docker
