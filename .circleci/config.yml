@@ -8,7 +8,3 @@ jobs:
       - run: java --version
       - checkout
       - run: echo "this unit_test"
-
-workflows:
-  jobs:
-    - unit_test
