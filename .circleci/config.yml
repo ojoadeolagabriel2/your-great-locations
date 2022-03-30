@@ -46,4 +46,9 @@ workflows:
   deploy:
     jobs:
       - deploy_to_dev:
+          requires:
+            - "build_promote_to_docker"
       - deploy_to_production:
+          type: approval
+          requires:
+            - "build_promote_to_docker"
