@@ -35,7 +35,7 @@ jobs:
 
 workflows:
   jobs:
-    - unit_test
+    - "unit_test"
 #    - integration_test
 #    - build_promote_to_docker:
 #        requires:
