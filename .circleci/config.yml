@@ -8,22 +8,16 @@ jobs:
       - run: java --version
       - checkout
       - run: echo "this unit_test"
-      - save_cache:
-          paths:
-            - ~/.m2/repository
-          key: circleci-java-maven-{{ checksum "/tmp/maven_cache_seed" }}
   integration_test:
     docker:
       - image: cimg/openjdk:17.0.2
     steps:
-      - run: java --version
       - checkout
       - run: echo "this is integration_test"
   build_promote_to_docker:
     docker:
       - image: cimg/openjdk:17.0.2
     steps:
-      - run: java --version
       - checkout
       - run: echo "this is build_promote_to_docker"
   deploy_to_dev:
@@ -39,10 +33,17 @@ jobs:
       - checkout
       - run: echo "this is deploy_to_production"
 
-workflows:
-  jobs:
-    - unit_test
-    - integration_test
-    - build_promote_to_docker:
-    - deploy_to_dev:
-    - deploy_to_production:
+#workflows:
+#  jobs:
+#    - unit_test
+#    - integration_test
+#    - build_promote_to_docker:
+#        requires:
+#          - "integration_test"
+#    - deploy_to_dev:
+#        requires:
+#          - "build_promote_to_docker"
+#    - deploy_to_production:
+#        type: approval
+#        requires:
+#          - "build_promote_to_docker"
