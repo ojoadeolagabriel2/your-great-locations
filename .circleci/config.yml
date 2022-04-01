@@ -14,7 +14,7 @@ jobs:
       - image: cimg/openjdk:17.0.2
     steps:
       - checkout
-      - run: echo "this is build_promote_to_docker step"
+      - run: echo "this is build_promote_to_docker step << pipeline.git.revision >>"
   unit_test:
     docker:
       - image: cimg/openjdk:17.0.2
@@ -56,5 +56,5 @@ workflows:
       - deploy_to_dev:
           name: "deploy_to_dev"
       - deploy_to_production:
-          type: approval
+#          type: approval
           name: "deploy_to_production"
