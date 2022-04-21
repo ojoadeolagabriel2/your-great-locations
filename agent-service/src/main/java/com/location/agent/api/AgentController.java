@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -19,9 +21,10 @@ public class AgentController {
   /**
    * @return response object
    */
+  @GetMapping
   public ResponseEntity<List<AgentDto>> get() {
     log.info("calling hello endpoint");
-    return ResponseEntity.ok().build();
+    return ok().build();
   }
 
   /**
@@ -32,12 +35,22 @@ public class AgentController {
    */
   @GetMapping("/{uuid}")
   public ResponseEntity<AgentDto> getAgentById(@PathVariable String uuid) {
-    log.info("calling hello endpoint");
+    log.info("calling getAgentById with uuid " + uuid);
     validateUUID(uuid);
-    return ResponseEntity.ok().build();
+
+    return ok(
+        AgentDto.builder()
+            .email("ojoadeolagabriel@gmail.com")
+            .name("your great locations")
+            .description("best in the business :)")
+            .logoIdentifier("your_great_locations_small")
+            .addressLine1("84 london")
+            .addressLine2("nestiary street")
+            .postCode("n115ur")
+            .build());
   }
 
   private void validateUUID(String uuid) {
-    log.info("do nothing...");
+    log.info("do nothing... pass validation for {} now", uuid);
   }
 }

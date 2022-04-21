@@ -54,6 +54,8 @@ FROM --platform=linux/amd64 debian:stretch-slim
 ENV JAVA_HOME=/opt/java-minimal
 ENV PATH="$PATH:$JAVA_HOME/bin"
 
+RUN apt-get update && apt-get install -y
+
 COPY --from=packager "$JAVA_HOME" "$JAVA_HOME"
 COPY "/target/agent-service.jar" "/app.jar"
 
