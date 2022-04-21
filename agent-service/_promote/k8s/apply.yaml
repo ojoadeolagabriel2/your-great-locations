@@ -49,16 +49,22 @@ spec:
           image: registry-1.docker.io/ojoadeolagabriel/agent-service:latest
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/liveness
               port: 12345
+            timeoutSeconds: 3
             initialDelaySeconds: 60
+            failureThreshold: 3
             periodSeconds: 5
+            successThreshold: 1
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/readiness
               port: 12345
-            initialDelaySeconds: 80
+            timeoutSeconds: 3
+            initialDelaySeconds: 70
             periodSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
           ports:
             - containerPort: 12345
           imagePullPolicy: Always

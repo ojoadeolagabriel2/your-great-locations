@@ -24,6 +24,8 @@ local deploy = import "kube-deployment.libsonnet";
         ];
         result,
 
+        x:: 2,
+        x_val: self.x,
         user_name: name,
         email_address: email,
         full_address: address_parts,
