@@ -18,5 +18,5 @@ public enum ErrorCode {
   REQUEST_TOO_LARGE("request_entity_too_large"),
   RESOURCE_NOT_FOUND("resource_not_found");
 
-  private String code;
+  private final String code;
 }

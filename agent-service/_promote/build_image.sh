@@ -5,8 +5,8 @@ set -xe
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd )"
 
 # script vars
-SERVICE_NAME="${ENV_SERVICE_NAME:-listing-service}"
-IMAGE_NAME="${SERVICE_NAME}"
+SERVICE_NAME="${ENV_SERVICE_NAME:-agent-service}"
+IMAGE_NAME="ojoadeolagabriel/${SERVICE_NAME}"
 
 # versioned stuff
 VERSION="${ENV_VERSION:-$(date +%Y%m%d%H%M%S)}"
@@ -18,7 +18,7 @@ cd "$DIR"
 # package app
 mvn clean package spring-boot:repackage -DskipTests
 
-docker login registry.gitlab.com
+echo "Saturn432$" | docker login registry-1.docker.io -u ojoadeolagabriel --password-stdin
 
 # build latest image
 docker build -t "${IMAGE_NAME}:latest" -f "$DIR"/Dockerfile .
@@ -26,5 +26,8 @@ docker build -t "${IMAGE_NAME}:latest" -f "$DIR"/Dockerfile .
 # build versioned image
 docker build -t "${RESOLVED_NAME}" -f "$DIR"/Dockerfile .
 
+# push image
+docker push "${IMAGE_NAME}:latest"
+
 # run from k8s
-"$DIR"/k8s/apply.sh
+"$DIR"/_promote/k8s/apply.sh
