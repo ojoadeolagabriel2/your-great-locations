@@ -10,11 +10,8 @@ data:
   .dockerconfigjson: eyJhdXRocyI6eyJyZWdpc3RyeS0xLmRvY2tlci5pbyI6eyJ1c2VybmFtZSI6Im9qb2FkZW9sYWdhYnJpZWwiLCJwYXNzd29yZCI6IlNhdHVybjQzMiQiLCJlbWFpbCI6Im9qb2FkZW9sYWdhYnJpZWxAZ21haWwuY29tIiwiYXV0aCI6ImIycHZZV1JsYjJ4aFoyRmljbWxsYkRwVFlYUjFjbTQwTXpJayJ9fX0=
 kind: Secret
 metadata:
-  creationTimestamp: "2022-04-19T04:08:17Z"
   name: regcred
   namespace: location-ns
-  resourceVersion: "6151391"
-  uid: 1c605849-ce31-4c0f-b054-ab65dd0a8990
 type: kubernetes.io/dockerconfigjson
 ---
 kind: ConfigMap
@@ -81,6 +78,7 @@ metadata:
   name: agent-service
   namespace: location-ns
 spec:
+  type: LoadBalancer
   ports:
     - port: 12345
       protocol: TCP
@@ -88,25 +86,21 @@ spec:
   selector:
     app.kubernetes.io/instance: agent-service
     app.kubernetes.io/name: agent-service
-  type: NodePort
-status:
-  loadBalancer: {}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minimal-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: location-ingress
+  namespace: location-ns
 spec:
-  ingressClassName: nginx
   rules:
     - http:
         paths:
-          - path: /poopsy
+          - path: /agency
             pathType: Prefix
             backend:
               service:
                 name: agent-service
                 port:
                   number: 12345
+  ingressClassName: nginx
