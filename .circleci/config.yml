@@ -35,6 +35,8 @@ jobs:
     steps:
       - checkout
       - run: pwd && ls -al
+      - run: cd agent-service
+      - run: pwd && ls -al
       - run: "ls -al && cd agent-service && _promote/build_promote.sh"
   deploy_to_dev:
     docker:
