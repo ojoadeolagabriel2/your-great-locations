@@ -20,7 +20,7 @@ jobs:
     steps:
       - checkout
       - run: echo "this is build_promote_to_docker step with revision << pipeline.git.revision >>"
-      - run: "./agent-service/_promote/build_promote.sh"
+      - run: "cd ./agent-service && _promote/build_promote.sh"
   unit_test:
     docker:
       - image: cimg/openjdk:17.0.2
