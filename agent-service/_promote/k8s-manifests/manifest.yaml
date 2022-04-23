@@ -84,8 +84,7 @@ spec:
       protocol: TCP
       targetPort: 12345
   selector:
-    app.kubernetes.io/instance: agent-service
-    app.kubernetes.io/name: agent-service
+    app: agent-service
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -93,6 +92,7 @@ metadata:
   name: location-ingress
   namespace: location-ns
 spec:
+  ingressClassName: nginx
   rules:
     - http:
         paths:
@@ -103,4 +103,3 @@ spec:
                 name: agent-service
                 port:
                   number: 12345
-  ingressClassName: nginx

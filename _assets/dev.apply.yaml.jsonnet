@@ -5,7 +5,8 @@ local data = [
                      apiVersion: 1,
                      kind: "Namespace",
                      metadata: {
-                         name: namespace
+                         name: namespace,
+                         namespace: namespace,
                      }
                  },
                  {
