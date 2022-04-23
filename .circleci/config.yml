@@ -29,12 +29,13 @@ jobs:
       SERVICE_NAME: "agent-service"
       IMAGE_NAME: "ojoadeolagabriel/agent-service"
       RESOLVED_NAME: "${IMAGE_NAME}:${VERSION}"
+    working_directory: ~/ygl
     docker:
       - image: cimg/openjdk:17.0.2
     steps:
       - checkout
       - run: ls -al && echo "this is build_promote_to_docker step with revision << pipeline.git.revision >>"
-      - run: "cd agent-service && _promote/build_promote.sh"
+      - run: "ls -al && cd agent-service && _promote/build_promote.sh"
   deploy_to_dev:
     docker:
       - image: cimg/base:2022.03
