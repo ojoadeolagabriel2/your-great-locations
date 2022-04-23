@@ -17,12 +17,12 @@ jobs:
       - checkout
       - save_m2_cache
       - run: echo "this unit_test"
-    integration_test:
-      docker:
-        - image: cimg/openjdk:17.0.2
-      steps:
-        - checkout
-        - run: echo "this is integration_tes stept"
+  integration_test:
+    docker:
+      - image: cimg/openjdk:17.0.2
+    steps:
+      - checkout
+      - run: echo "this is integration_tes stept"
   build_promote_to_docker:
     working_directory: ~/agent-service
     environment:
