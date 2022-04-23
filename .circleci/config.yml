@@ -34,7 +34,7 @@ jobs:
       - image: cimg/openjdk:17.0.2
     steps:
       - checkout
-      - run: ls -al && echo "this is build_promote_to_docker step with revision << pipeline.git.revision >>"
+      - run: pwd && ls -al"
       - run: "ls -al && cd agent-service && _promote/build_promote.sh"
   deploy_to_dev:
     docker:
