@@ -12,11 +12,15 @@ jobs:
   build_promote_to_docker:
     environment:
       VERSION: 1.0.<< pipeline.number >>
+      SERVICE_NAME: "agent-service"
+      IMAGE_NAME: "ojoadeolagabriel/agent-service"
+      RESOLVED_NAME: "${IMAGE_NAME}:${VERSION}"
     docker:
       - image: cimg/openjdk:17.0.2
     steps:
       - checkout
-      - run: echo "this is build_promote_to_docker step with revision << pipeline.git.revision >>"
+      - run: echo "this is build_promote_to_docker step with revision << pipeline.git.revision >>
+      - run: "./agent-service/_promote/build_promote.sh"
   unit_test:
     docker:
       - image: cimg/openjdk:17.0.2
