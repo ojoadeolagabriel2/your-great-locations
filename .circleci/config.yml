@@ -24,7 +24,6 @@ jobs:
       - checkout
       - run: echo "this is integration_tes stept"
   build_promote_to_docker:
-    working_directory: "worker"
     environment:
       VERSION: 1.0.<< pipeline.number >>
       SERVICE_NAME: "agent-service"
