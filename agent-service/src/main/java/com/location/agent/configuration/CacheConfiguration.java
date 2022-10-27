@@ -19,7 +19,7 @@ public class CacheConfiguration {
 
     @Bean
     RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
-        return (builder) -> {
+        return builder -> {
             Map<String, RedisCacheConfiguration> configurationMap = new HashMap<>();
             configurationMap.put(AGENTS_CACHE_LABEL, defaultCacheConfig().entryTtl(ofSeconds(OFFERS_TTL)));
             builder.withInitialCacheConfigurations(configurationMap);

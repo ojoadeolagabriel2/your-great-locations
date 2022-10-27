@@ -123,7 +123,6 @@ public class ListingEntityConverter {
             .map(item -> ListingImageThumbnailEntity.builder().code(item).build())
             .collect(toSet()));
 
-
     entity.setListingOwner(
         ListingOwnerEntity.builder()
             .name(listingOwner.getName())
