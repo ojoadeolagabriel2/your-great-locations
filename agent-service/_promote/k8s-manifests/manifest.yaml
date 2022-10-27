@@ -2,37 +2,16 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: location-ns
   namespace: location-ns
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: location-ns-ingress
-spec:
-  ingressClassName: nginx
-  rules:
-    - host: "poopsyapp.io"
-      http:
-        paths:
-          - pathType: Prefix
-            path: /poop
-            backend:
-              service:
-                name: agent-service
-                port:
-                  number: 12345
+  name: location-ns
 ---
 apiVersion: v1
 data:
   .dockerconfigjson: eyJhdXRocyI6eyJyZWdpc3RyeS0xLmRvY2tlci5pbyI6eyJ1c2VybmFtZSI6Im9qb2FkZW9sYWdhYnJpZWwiLCJwYXNzd29yZCI6IlNhdHVybjQzMiQiLCJlbWFpbCI6Im9qb2FkZW9sYWdhYnJpZWxAZ21haWwuY29tIiwiYXV0aCI6ImIycHZZV1JsYjJ4aFoyRmljbWxsYkRwVFlYUjFjbTQwTXpJayJ9fX0=
 kind: Secret
 metadata:
-  creationTimestamp: "2022-04-19T04:08:17Z"
   name: regcred
   namespace: location-ns
-  resourceVersion: "6151391"
-  uid: 1c605849-ce31-4c0f-b054-ab65dd0a8990
 type: kubernetes.io/dockerconfigjson
 ---
 kind: ConfigMap
@@ -91,13 +70,36 @@ spec:
             - configMapRef:
                 name: agent-service-config-map
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  namespace: location-ns
+  labels:
+    app.kubernetes.io/name: agent-service
   name: agent-service
+  namespace: location-ns
 spec:
-  selector:
-    name: agent-service
+  type: LoadBalancer
   ports:
-    - port: 12345 # Default port for image
+    - port: 12345
+      protocol: TCP
+      targetPort: 12345
+  selector:
+    app: agent-service
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: location-ingress
+  namespace: location-ns
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /agency
+            pathType: Prefix
+            backend:
+              service:
+                name: agent-service
+                port:
+                  number: 12345

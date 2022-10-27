@@ -28,6 +28,3 @@ docker build -t "${RESOLVED_NAME}" -f "$DIR"/Dockerfile .
 
 # push image
 docker push "${IMAGE_NAME}:latest"
-
-# run from k8s
-"$DIR"/_promote/k8s/apply.sh
