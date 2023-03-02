@@ -9,7 +9,6 @@ import com.locations.listing.api.converter.ListingConverter;
 import com.locations.listing.api.dto.CreateListingResponseDto;
 import com.locations.listing.api.dto.ListingDto;
 import com.locations.listing.domain.error.BusinessException;
-import com.locations.listing.domain.model.ErrorCode;
 import com.locations.listing.domain.model.Listing;
 import com.locations.listing.service.ListingService;
 import io.micrometer.core.annotation.Timed;
@@ -22,6 +21,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.locations.listing.domain.model.ErrorCode.INTEGRATION_ERROR;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
@@ -45,7 +45,6 @@ public class ListingController {
     @Timed(description = "time interval processing creating listing")
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<CreateListingResponseDto> createListing(@RequestBody ListingDto listingDto) {
-
         Listing listing = converter.toModel(listingDto);
         long listingId = listingService.save(listing);
         return ok(CreateListingResponseDto.builder().listingId(listingId).build());
@@ -62,7 +61,7 @@ public class ListingController {
             listingService.update(updatedListing);
         } catch (JsonPatchException | JsonProcessingException e) {
             e.printStackTrace();
-            throw new BusinessException(ErrorCode.INTEGRATION_ERROR.getCode(), "invalid patch request");
+            throw new BusinessException(INTEGRATION_ERROR.getCode(), "invalid patch request");
         }
     }
 
@@ -76,10 +75,9 @@ public class ListingController {
     @Timed(description = "time interval processing listing request")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ListingDto findListingById(@PathVariable("id") Long listingId) {
-
-        log.info("searching listing with id {}", listingId);
+        log.debug("searching listing with id {}", listingId);
         Listing listing = listingService.getById(listingId);
-        log.info("searching listing with id {}.. done", listingId);
+        log.debug("searching listing with id {}.. done", listingId);
         return converter.toDto(listing);
     }
 

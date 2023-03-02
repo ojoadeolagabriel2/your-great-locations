@@ -16,7 +16,6 @@ import java.util.Optional;
 public class ListingServerConfiguration {
     private String selectedEnvironment;
     private List<ListingEnvironment> environments;
-
     public Optional<ListingEnvironment> getActiveEnvironmentConfiguration() {
         return environments.stream().filter(item -> selectedEnvironment.equals(item.getName())).findFirst();
     }

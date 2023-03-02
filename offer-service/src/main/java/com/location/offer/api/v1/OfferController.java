@@ -26,8 +26,7 @@ public class OfferController {
 
   @Timed(description = "interval for createOfferByListingId request")
   @PostMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-  public ResponseEntity<OfferDto> createDefaultOfferByListingId(
-      @PathVariable("id") Long listingId) {
+  public ResponseEntity<OfferDto> createDefaultOfferByListingId(@PathVariable("id") Long listingId) {
     log.info("create default offer for listing {}", listingId);
     return ok().build();
   }

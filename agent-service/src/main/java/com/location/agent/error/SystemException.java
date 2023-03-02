@@ -9,7 +9,7 @@ import lombok.Value;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
-public class SystemException extends RuntimeException {
+public  class SystemException extends RuntimeException {
   String code;
   String message;
   String detail;

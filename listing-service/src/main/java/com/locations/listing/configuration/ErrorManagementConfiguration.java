@@ -55,7 +55,6 @@ public class ErrorManagementConfiguration {
     protected ResponseEntity<ApiError> handleGeneral(IntegrationException ex) {
         String logMessageHash = md5Hex(now() + ex.getMessage());
         log.error(String.format("Error processing api request %s, see: %s", ex.getMessage(), logMessageHash), ex);
-
         ApiError error = ApiError
                 .builder()
                 .code(ex.getCode())

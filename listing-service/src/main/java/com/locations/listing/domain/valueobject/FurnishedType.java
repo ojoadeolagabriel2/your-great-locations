@@ -1,6 +1,5 @@
 package com.locations.listing.domain.valueobject;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
