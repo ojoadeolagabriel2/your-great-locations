@@ -28,6 +28,11 @@ public class KafkaConfiguration {
   private final KafkaTemplate<String, String> kafkaTemplate;
   private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
+  @Scheduled(fixedRate = 10_000)
+  public void reportStatusAtInterval(){
+    log.info("we are still running");
+  }
+
   @Scheduled(fixedRate = 20_000)
   public void reportCurrentTime() {
     var message = "time is: " + dateFormat.format(new Date());
