@@ -1,2 +1,4 @@
-package com.location.offer.configuration.condition;public class ConditionOnUnix {
+package com.location.offer.configuration.condition;
+
+public @interface ConditionOnUnix {
 }

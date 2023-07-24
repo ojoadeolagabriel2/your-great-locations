@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-
   // system errors
   INVALID_REQUEST("invalid_request"),
   UPSTREAM_ENTITY_FAILURE("upstream_entity_failure"),

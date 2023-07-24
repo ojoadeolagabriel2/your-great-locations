@@ -1,7 +1,7 @@
 package com.location.offer.api.v1;
 
-import com.location.offer.api.dto.OfferListingDto;
 import com.location.offer.api.dto.OfferDto;
+import com.location.offer.api.dto.OfferListingDto;
 import com.location.offer.service.OfferService;
 import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +24,7 @@ public class OfferController {
 
   private final OfferService offerService;
 
-  @Timed(description = "interval for createOfferByListingId request")
+  @Timed(description = "interval for createofferbylistingid request")
   @PostMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
   public ResponseEntity<OfferDto> createDefaultOfferByListingId(@PathVariable("id") Long listingId) {
     log.info("create default offer for listing {}", listingId);
